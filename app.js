@@ -22,9 +22,9 @@ const _filename = fileURLToPath(import.meta.url); //_filename = la ruta del arch
 const _dirname = path.dirname(_filename); //_dirname = cual es la organización o estructuración de mi proyecto (directorio)
 
 // 3. Funcionalidades que necesite agregar
-app.get("/", (req, res) => {
-  res.send("Server works")
-});
+// app.get("/", (req, res) => {
+//   res.send("Server works")
+// });
 
 app.use(cors()); //Habilita CORS
 app.use(express.json()); //para usar formato json en peticiones y respuestas
@@ -32,6 +32,13 @@ app.use("/products", productRouter);
 app.use("/users", userRouter);
 app.use("/uploads", express.static(path.join(_dirname, "src/uploads")));
 app.use("/login", loginRouter);
+
+// Servir el frontend
+app.use(express.static(path.join(_dirname, "dist", "frontend", "browser")));
+
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(_dirname, "dist", "frontend", "browser", "index.html"));
+});
 
 // 4. Levantar el servidor (3000, 6000 (no recomendado), 9000)
 app.listen(port, () => {
